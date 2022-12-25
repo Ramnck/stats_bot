@@ -1,19 +1,20 @@
-import asyncio
-import sys, os
+import logging, asyncio
+
 from aiogram import Bot, Dispatcher
-from dotenv import load_dotenv
+from decouple import config
 
-async def main(token: str):
-    bot = Bot(token=os.get)
+from handlers import default
 
-if __name__ == "__main__":
-    load_dotenv()
-    
-    token = ''
-    if len(sys.argv) > 1 and sys.argv[1] in ['-t','t','-test','test','-d', 'd', 'dev', '-dev']:
-        token = os.getenv('TOKEN_DEV')
-    else:
-        token = os.getenv('TOKEN')
+logging.basicConfig(level=logging.INFO)
 
-    asyncio.run(main(token))
-    
+async def main():
+    bot = Bot(token=config("TOKEN"))
+    dp = Dispatcher()
+
+    dp.include_router(default.router)
+
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
+
+if __name__ == '__main__':
+    asyncio.run(main())

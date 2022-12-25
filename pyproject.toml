@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "stats-bot"
+version = "0.1.0"
+description = "bot for statistics"
+authors = ["Ramnck, Flict"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "stats_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "3.0.0b6"
+python-decouple = "^3.6"
+tortoise-orm = "^0.19.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+isort = "^5.11.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

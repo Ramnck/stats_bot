@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15.1
+    restart: unless-stopped
+    env_file:
+      - ./app/.env
+    container_name: telegram_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - webnet
+    ports:
+      - 5432:5432
+
+  bot:
+    image: angarbot:latest
+    restart: unless-stopped
+    container_name: telegram_bot
+    build: ./app
+    depends_on:
+      - db
+    networks:
+      - webnet
+    ports:
+      - 443:443
+      - 80:80
+
+networks:
+  webnet:
+
+volumes:
+  pgdata:

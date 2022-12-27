@@ -1,5 +1,5 @@
 from .models import Statistics, GetStats
-from tools.schemas import StatsBase
+from ..tools.schemas import StatsBase
 from tortoise.exceptions import ValidationError
 
 
@@ -9,7 +9,7 @@ class CRUDStats:
 
     async def get_or_create(self, id: int) -> StatsBase:
         stats = await self.model.get_or_create(id=id)
-        return await GetStats.from_tortoise_orm(stats)
+        return await GetStats.from_tortoise_orm(stats[0])
 
     async def update_field(self, id: int, schema: StatsBase) -> StatsBase | None:
         try:

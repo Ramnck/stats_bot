@@ -2,14 +2,8 @@ from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from ..db.models import Statistics
-from ..base import is_based
 
 router = Router()
-
-
-# @router.message(~F.func(lambda msg: is_based(msg)))
-# async def wrong_people(msg: Message):
-#     return
 
 
 @router.message(Command(commands=["start"]))

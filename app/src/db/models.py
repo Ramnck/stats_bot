@@ -1,9 +1,10 @@
-from tortoise.models import Model
 from tortoise import fields
+from tortoise.models import Model
+from tortoise.contrib.pydantic import pydantic_model_creator
+
 
 class Statistics(Model):
     id = fields.IntField(pk=True)
-    need_to_translate_voices = fields.BooleanField(default=True)
     messages = fields.IntField(default=0)
     voices = fields.IntField(default=0)
     video_notes = fields.IntField(default=0)
@@ -11,5 +12,5 @@ class Statistics(Model):
     photos = fields.IntField(default=0)
     videos = fields.IntField(default=0)
 
-    class Meta():
-        table = 'statistics'
+
+GetStats = pydantic_model_creator(Statistics, name="GetStats")

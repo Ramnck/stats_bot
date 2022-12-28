@@ -2,9 +2,9 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-from src.settings import get_settings
 from src.db.database import init_db
 from src.handlers import commands, statictics
+from src.settings import get_settings
 
 logging.basicConfig(level=logging.INFO)
 

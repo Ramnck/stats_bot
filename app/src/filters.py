@@ -1,4 +1,5 @@
 from aiogram.types import Message
+
 from .settings import get_settings
 
 settings = get_settings()

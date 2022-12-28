@@ -1,5 +1,5 @@
-from decouple import config
 from tortoise import Tortoise
+
 from ..settings import Settings
 
 

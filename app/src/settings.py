@@ -1,12 +1,13 @@
-from pydantic import BaseSettings
 from functools import lru_cache
+
 from decouple import config
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
     CHATS = ["Ангар без цензуры", "ПРОДА"]
     USERS = []
-    # 30 minutes
+    # 30 minutes 60 * 15
     TALK_EXPIRE = 60 * 15
 
     TOKEN = config("TOKEN")

@@ -1,6 +1,12 @@
-from .models import Statistics, GetStats
-from ..tools.schemas import StatsBase
+from logging import getLogger
+
 from tortoise.exceptions import ValidationError
+from tortoise.expressions import F
+
+from ..tools.schemas import StatsBase
+from .models import GetStats, Statistics
+
+logger = getLogger("db.crud")
 
 
 class CRUDStats:
@@ -11,11 +17,11 @@ class CRUDStats:
         stats = await self.model.get_or_create(id=id)
         return await GetStats.from_tortoise_orm(stats[0])
 
-    async def update_field(self, id: int, schema: StatsBase) -> StatsBase | None:
+    async def update_field(self, id: int, field: str) -> StatsBase | None:
         try:
-            await self.model.filter(id=id).update(**schema.dict())
+            await self.model.filter(id=id).update(**{field: F(field) + 1})
         except ValidationError:
-            print("ALert hui")
+            logger.error("ValidationError: stats update alidation")
 
 
 stats = CRUDStats(Statistics)

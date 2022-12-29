@@ -29,15 +29,14 @@ async def voice_to_text(file_path: Path | str) -> str | None:
     with sr.AudioFile(str(new_path)) as file:
         r = sr.Recognizer()
         audio = r.record(file)
+        text = None
         try:
-            remove(new_path)
-            return r.recognize_google(audio,language='RU-ru')
+            text = r.recognize_google(audio,language='RU-ru')
         except sr.UnknownValueError:
             logger("could not understand audio")
         except sr.RequestError as e:
             logger(f"error occuried at server: {e}")
-        finally:
-            remove(new_path)
-            return None
+    remove(new_path)
+    return text
 
     

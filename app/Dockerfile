@@ -1,6 +1,7 @@
 FROM python:3.11.1
 RUN pip install poetry
+RUN apt-get update && apt-get install -y ffmpeg lame flac vorbis-tools
 COPY . /app
 WORKDIR /app
 RUN poetry install
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["poetry", "run", "python", "main.py"]

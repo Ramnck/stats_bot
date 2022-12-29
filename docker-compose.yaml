@@ -23,6 +23,8 @@ services:
       - db
     networks:
       - webnet
+    volumes:
+      - ./app/tmp:/app/tmp
     ports:
       - 443:443
       - 80:80

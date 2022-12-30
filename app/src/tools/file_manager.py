@@ -20,9 +20,8 @@ async def download(url: str, destination: str | Path):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
             if resp.status == 200:
-                f = await aiofiles.open(destination, mode='wb')
-                await f.write(await resp.read())
-                await f.close()
+                async with aiofiles.open(destination, mode='wb') as f:
+                    await f.write(await resp.read())
             else:
                 logger.error(f"{resp.status} status code during downloading file")
 

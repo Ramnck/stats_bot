@@ -7,9 +7,9 @@ from pydantic import BaseSettings
 class Settings(BaseSettings):
     CHATS = ["Ангар без цензуры", "ПРОДА"]
     USERS = []
-    # 30 minutes 60 * 15
+
     TALK_EXPIRE = 60 * 40
-    TALK_START = 5
+    TALK_START = 60 * 15
 
     TOKEN = config("TOKEN")
     POSTGRES_DB = config("POSTGRES_DB")

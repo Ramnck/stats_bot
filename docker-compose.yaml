@@ -10,7 +10,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - webnet
+      - tg_webnet
     ports:
       - 5432:5432
 
@@ -22,7 +22,7 @@ services:
     depends_on:
       - db
     networks:
-      - webnet
+      - tg_webnet
     volumes:
       - ./app/tmp:/app/tmp
     ports:
@@ -30,7 +30,7 @@ services:
       - 80:80
 
 networks:
-  webnet:
+  tg_webnet:
 
 volumes:
   pgdata:

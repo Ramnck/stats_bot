@@ -1,7 +1,10 @@
 from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import Message
+
+from ..db.crud import stats
 from ..db.models import Statistics
+from ..tools.formatter import stats_format
 
 router = Router()
 
@@ -16,27 +19,8 @@ async def help(msg: Message):
     await msg.answer("Если ты не знаешь что это за бот значит он тебе не нужен")
 
 
-# Refactor this
 @router.message(Command(commands=["info"]))
 async def info(msg: Message):
-    stats = (
-        await Statistics.filter(id=msg.from_user.id)
-        .first()
-        .values_list(
-            "messages", "voices", "video_notes", "stickers", "photos", "videos"
-        )
-    )
-    if not stats:
-        stats = [0] * 6
-    await msg.reply(
-        """Вот твоя статистика:
-Отправлено:
-{} сообщений,
-{} голосовых,
-{} кружочков,
-{} стикеров,
-{} фото,
-{} видео""".format(
-            *stats
-        )
-    )
+    user_stats = await stats.get_or_create(msg.from_user.id)
+    res = stats_format(user_stats)
+    await msg.reply(res, parse_mode="HTML")

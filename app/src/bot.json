@@ -1,1 +1,11 @@
-{ "speech_to_text": true }
+{
+  "speech_to_text": true,
+  "chats": {
+    "-1001873958874": {
+      "user_id": 0,
+      "last_msg_time": 0,
+      "diff_users": {},
+      "analysis": false
+    }
+  }
+}

@@ -12,7 +12,7 @@ from asyncio import sleep
 
 from os import remove
 
-logger = getLogger('tools.files')
+logger = getLogger('tools.file_manager')
 
 settings = get_settings()
 

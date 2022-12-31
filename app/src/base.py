@@ -15,3 +15,6 @@ async def bot_get_file(object: Downloadable) -> File:
 
 async def bot_get_member(user_id: int) -> ChatMember:
     return await bot.get_chat_member(settings.ANGAR_ID, user_id)
+
+async def bot_send_message(text: str) -> None:
+    await bot.send_message(settings.ANGAR_ID, text)

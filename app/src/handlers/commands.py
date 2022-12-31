@@ -6,7 +6,7 @@ from ..db.crud import stats
 from ..db.models import Statistics
 from ..tools.formatter import stats_format
 
-from ..base import bot_get_member
+from ..base import bot_get_member, bot_send_message
 
 router = Router()
 
@@ -26,6 +26,11 @@ async def info(msg: Message):
     user_stats = await stats.get_or_create(msg.from_user.id)
     res = stats_format(user_stats)
     await msg.reply(res, parse_mode="HTML")
+
+
+@router.message(Command(commands=["happynewyear"]))
+async def new_year(msg: Message):
+    await bot_send_message("Ангар dev поздравляет вас с Новым Годом и дарит вам этого ебейшего бота. С Новым годом, братья ❤️‍🔥🥳🎉")
 
 
 @router.message(F.text == "@all")

@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     TALK_EXPIRE = 60 * 40
     TALK_START = 60 * 15
 
+    ANGAR_ID = config("ANGAR_ID")
     TOKEN = config("TOKEN")
     POSTGRES_DB = config("POSTGRES_DB")
     POSTGRES_USER = config("POSTGRES_USER")

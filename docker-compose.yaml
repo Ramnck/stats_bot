@@ -24,6 +24,7 @@ services:
     networks:
       - webnet
     volumes:
+      - tg_libdata:/usr/local/lib
       - ./app/tmp:/app/tmp
 
 
@@ -31,4 +32,5 @@ networks:
   webnet:
 
 volumes:
+  tg_libdata:
   tg_pgdata:

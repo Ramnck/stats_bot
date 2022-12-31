@@ -2,6 +2,7 @@ from functools import lru_cache
 
 from decouple import config
 from pydantic import BaseSettings
+from pathlib import Path
 
 
 class Settings(BaseSettings):
@@ -17,6 +18,8 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD = config("POSTGRES_PASSWORD")
     DB_HOST = config("DB_HOST")
     DB_PORT = config("DB_PORT")
+
+    TMP_DIR: Path = Path('.').absolute() / 'tmp'
 
 
 @lru_cache()

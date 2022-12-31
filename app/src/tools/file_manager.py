@@ -1,10 +1,21 @@
-import json
-from logging import getLogger
-from pathlib import Path
-
+import aiohttp
 import aiofiles
+import json
+from pathlib import Path
+from aiogram.types import Downloadable
+from ..base import bot
+from ..settings import get_settings
 
-logger = getLogger("tools.file_manager")
+from contextlib import asynccontextmanager
+
+from logging import getLogger
+from asyncio import sleep
+
+from os import remove
+
+logger = getLogger('tools.file_manager')
+
+settings = get_settings()
 
 
 async def _get_bot_data() -> dict:
@@ -37,3 +48,28 @@ async def update_bot_chat(chat_name: str, fields: dict) -> dict | None:
         return bot
     except KeyError:
         logger.error(f"KeyError: Chat - {chat_name} not in whitelist!")
+
+
+async def download(url: str, destination: str | Path):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status == 200:
+                async with aiofiles.open(destination, mode='wb') as f:
+                    await f.write(await resp.read())
+            else:
+                logger.error(f"{resp.status} status code during downloading file")
+
+@asynccontextmanager
+async def remote_open(object: Downloadable):
+    try:
+        await sleep(.03)
+        file = await bot.get_file(object.file_id)
+        file_path = settings.TMP_DIR / (str(file.file_unique_id) + '.oga') 
+        url = f"https://api.telegram.org/file/bot{settings.TOKEN}/{file.file_path}"
+        await download(url, file_path)
+        yield file_path
+    except Exception as ex:
+        logger.warning(str(ex))
+    finally:
+        remove(file_path)
+        

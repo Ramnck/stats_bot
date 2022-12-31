@@ -8,11 +8,11 @@ services:
       - ./app/.env
     container_name: telegram_db
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - tg_pgdata:/var/lib/postgresql/data
     networks:
       - webnet
     ports:
-      - 5432:5432
+      - 2023:5432
 
   bot:
     image: angarbot:latest
@@ -23,12 +23,12 @@ services:
       - db
     networks:
       - webnet
-    ports:
-      - 443:443
-      - 80:80
+    volumes:
+      - ./app/tmp:/app/tmp
+
 
 networks:
   webnet:
 
 volumes:
-  pgdata:
+  tg_pgdata:

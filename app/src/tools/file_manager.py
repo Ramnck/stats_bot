@@ -3,7 +3,7 @@ import aiofiles
 import json
 from pathlib import Path
 from aiogram.types import Downloadable
-from ..base import bot
+from ..base import bot_get_file
 from ..settings import get_settings
 
 from contextlib import asynccontextmanager
@@ -63,7 +63,7 @@ async def download(url: str, destination: str | Path):
 async def remote_open(object: Downloadable):
     try:
         await sleep(.03)
-        file = await bot.get_file(object.file_id)
+        file = await bot_get_file(object)
         file_path = settings.TMP_DIR / (str(file.file_unique_id) + '.oga') 
         url = f"https://api.telegram.org/file/bot{settings.TOKEN}/{file.file_path}"
         await download(url, file_path)

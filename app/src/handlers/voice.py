@@ -7,6 +7,8 @@ from ..tools.recognition import voice_to_text
 from asyncio import sleep
 from logging import getLogger
 
+import src.handlers.statictics as st
+
 settings = get_settings()
 logger = getLogger("handlers.voice")
 router = Router()
@@ -19,4 +21,4 @@ async def voice(msg: Message):
             await msg.reply(text)
         else:
             logger.info("Voice is not recognised")
-    
+    await st.router.propagate_event("message", msg)

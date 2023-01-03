@@ -33,7 +33,7 @@ async def new_year(msg: Message):
     await bot_send_message("Ангар dev поздравляет вас с Новым Годом и дарит вам этого ебейшего бота. С Новым годом, братья ❤️‍🔥🥳🎉")
 
 
-@router.message(F.text == "@all")
+@router.message(F.text.contains("@all"))
 async def mention_all(msg: Message):
     members = await Statistics.all().values_list('id', flat=True)
     print(members)

@@ -2,12 +2,10 @@
     "speech_to_text": true,
     "chats": {
         "-1001873958874": {
-            "user_id": 1092776376,
-            "last_msg_time": 1672787803.0,
-            "diff_users": {
-                "804309612": 5
-            },
-            "analysis": true
+            "user_id": 0,
+            "last_msg_time": 1672789378.0,
+            "diff_users": {},
+            "analysis": false
         },
         "-1001661456708": {
             "user_id": 0,

@@ -1,6 +1,7 @@
 from aiogram.types import Message, Downloadable, File, ChatMember
 from aiogram import Bot
 from .settings import get_settings
+from typing import List
 
 settings = get_settings()
 
@@ -18,3 +19,7 @@ async def bot_get_member(user_id: int) -> ChatMember:
 
 async def bot_send_message(text: str) -> None:
     await bot.send_message(settings.ANGAR_ID, text)
+
+async def bot_delete_message(*msgs) -> None:
+    for msg in msgs:
+        await bot.delete_message(msg.chat.id, msg.message_id)

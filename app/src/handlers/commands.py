@@ -6,7 +6,8 @@ from ..db.crud import stats
 from ..db.models import Statistics
 from ..tools.formatter import stats_format
 
-from ..base import bot_get_member, bot_send_message
+from ..base import bot_get_member, bot_send_message, bot_delete_message
+from asyncio import sleep
 
 router = Router()
 
@@ -25,7 +26,9 @@ async def help(msg: Message):
 async def info(msg: Message):
     user_stats = await stats.get_or_create(msg.from_user.id)
     res = stats_format(user_stats)
-    await msg.reply(res, parse_mode="HTML")
+    answer = await msg.reply(res, parse_mode="HTML")
+    await sleep(10)
+    await bot_delete_message(answer, msg)
 
 
 @router.message(Command(commands=["happynewyear"]))

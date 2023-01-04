@@ -4,12 +4,15 @@ from aiogram.types import Message
 
 from ..db.crud import stats
 from ..db.models import Statistics
-from ..tools.formatter import stats_format
+from ..tools.formatter import stats_format, mention_all
 
 from ..base import bot_get_member, bot_send_message, bot_delete_message
+from ..settings import get_settings
 from asyncio import sleep
 
+
 router = Router()
+settings = get_settings()
 
 
 @router.message(Command(commands=["start"]))
@@ -36,12 +39,21 @@ async def new_year(msg: Message):
     await bot_send_message("Ангар dev поздравляет вас с Новым Годом и дарит вам этого ебейшего бота. С Новым годом, братья ❤️‍🔥🥳🎉")
 
 
+@router.message(Command(commands=["infoall"]))
+async def info_all(msg: Message):
+    if msg.chat.id == settings.ANGAR_ID:
+        await msg.reply("В ангар срать не буду, спроси в лс")
+    else:
+        mentions = await mention_all()
+        for mention in mentions:
+            user_stats = await stats.get_or_create(int(mention[mention.index("id=")+3:mention.index('">')]))
+            res = stats_format(user_stats)
+            res = res.replace("Твоя активность, сучка", "Активность " + mention)
+            await msg.reply(res, parse_mode="HTML")
+
+
 @router.message(F.text.contains("@all"))
-async def mention_all(msg: Message):
-    members = await Statistics.all().values_list('id', flat=True)
-    print(members)
-    text = ""
-    for user_id in members:
-        usr = (await bot_get_member(user_id)).user
-        text += usr.mention_html(usr.full_name) + " "
-    await msg.answer(text, parse_mode='html')
+async def all_command(msg: Message):
+    text = await mention_all()
+    text = ' '.join(text)
+    await msg.answer(text, parse_mode='HTML')

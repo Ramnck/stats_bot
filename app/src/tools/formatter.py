@@ -1,4 +1,6 @@
 from .schemas import StatsBase
+from ..db.models import Statistics
+from ..base import bot_get_member
 
 words = {
     "talk_stats": "Разгоны",
@@ -20,3 +22,11 @@ def stats_format(stats: StatsBase):
     row.insert(0, "<b>Твоя активность, сучка:</b>\n")
     row.insert(1, f"{words['talk_stats']}: {stat['talk_stats']} 🔥")
     return "\n".join(row)
+
+async def mention_all() -> str:
+    members = await Statistics.all().values_list('id', flat=True)
+    mentions = []
+    for user_id in members:
+        usr = (await bot_get_member(user_id)).user
+        mentions.append(usr.mention_html(usr.full_name))
+    return mentions

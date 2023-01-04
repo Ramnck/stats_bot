@@ -16,7 +16,8 @@ router = Router()
 @router.message((F.voice) | (F.video_note))
 async def speech2text(msg: Message):
     if not (msg.video_note and msg.chat.id == settings.ANGAR_ID):
-        async with remote_open(msg.voice) as f:
+        obj = msg.voice if msg.voice else msg.video_note
+        async with remote_open(obj) as f:
             text = await voice_to_text(f)
             if text:
                 await msg.reply(text)

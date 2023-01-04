@@ -30,8 +30,9 @@ async def info(msg: Message):
     user_stats = await stats.get_or_create(msg.from_user.id)
     res = stats_format(user_stats)
     answer = await msg.reply(res, parse_mode="HTML")
-    await sleep(10)
-    await bot_delete_message(answer, msg)
+    if msg.chat.id == settings.ANGAR_ID:
+        await sleep(10)
+        await bot_delete_message(answer, msg)
 
 
 @router.message(Command(commands=["happynewyear"]))

@@ -64,7 +64,7 @@ async def remote_open(object: Downloadable):
     try:
         await sleep(.03)
         file = await bot_get_file(object)
-        file_path = settings.TMP_DIR / (str(file.file_unique_id) + '.oga') 
+        file_path = settings.TMP_DIR / (str(file.file_unique_id) + file.file_path[file.file_path.rindex('.'):]) 
         url = f"https://api.telegram.org/file/bot{settings.TOKEN}/{file.file_path}"
         await download(url, file_path)
         yield file_path

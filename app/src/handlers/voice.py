@@ -13,12 +13,13 @@ settings = get_settings()
 logger = getLogger("handlers.voice")
 router = Router()
 
-@router.message(F.voice)
-async def voice(msg: Message):
-    async with remote_open(msg.voice) as f:
-        text = await voice_to_text(f)
-        if text:
-            await msg.reply(text)
-        else:
-            logger.info("Voice is not recognised")
+@router.message((F.voice) | (F.video_note))
+async def speech2text(msg: Message):
+    if not (msg.video_note and msg.chat.id == settings.ANGAR_ID):
+        async with remote_open(msg.voice) as f:
+            text = await voice_to_text(f)
+            if text:
+                await msg.reply(text)
+            else:
+                logger.info("Voice is not recognised")
     await st.router.propagate_event("message", msg)

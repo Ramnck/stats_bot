@@ -16,7 +16,7 @@ def to_wav(file_path: Path | str) -> Path | str | None:
     new_path = file_path.parent / (file_path.name + '.wav')
     with open(settings.TMP_DIR / 'stdout', 'w+', encoding='utf-8') as f:
         with redirect_stdout(f):
-            subprocess.run(['ffmpeg', '-i', str(file_path), str(new_path)])
+            subprocess.run(['ffmpeg', '-vn',  '-i', str(file_path), str(new_path)])
     print(new_path, file_path)
     if getsize(new_path) >= 200 * 1024:
         return new_path

@@ -3,10 +3,9 @@ from aiogram.filters import Command
 from aiogram.types import Message
 
 from ..db.crud import stats
-from ..db.models import Statistics
 from ..tools.formatter import stats_format, mention_all
 
-from ..base import bot_get_member, bot_send_message, bot_delete_message
+from ..base import bot_send_message, bot_delete_message
 from ..settings import get_settings
 from asyncio import sleep
 

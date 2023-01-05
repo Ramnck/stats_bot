@@ -1,7 +1,6 @@
 from aiogram.types import Message, Downloadable, File, ChatMember
 from aiogram import Bot
 from .settings import get_settings
-from typing import List
 
 settings = get_settings()
 

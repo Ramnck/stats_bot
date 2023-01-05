@@ -1,5 +1,5 @@
 from .schemas import StatsBase
-from ..db.models import Statistics
+from ..db.crud import stats
 from ..base import bot_get_member
 
 words = {
@@ -24,7 +24,7 @@ def stats_format(stats: StatsBase):
     return "\n".join(row)
 
 async def mention_all() -> str:
-    members = await Statistics.all().values_list('id', flat=True)
+    members = await stats.all('id', values_list=True)
     mentions = []
     for user_id in members:
         usr = (await bot_get_member(user_id)).user

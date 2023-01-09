@@ -24,10 +24,7 @@ services:
     networks:
       - webnet
     volumes:
-      - tg_packagedata:/usr/local/lib/python3.11/site-packages
-      - tg_virtualenvs:/root/.cache/pypoetry/virtualenvs
       - ./app/tmp:/app/tmp
-      - tg_deps:/app/deps
 
 
 networks:
@@ -35,6 +32,3 @@ networks:
 
 volumes:
   tg_pgdata:
-  tg_packagedata:
-  tg_virtualenvs:
-  tg_deps:

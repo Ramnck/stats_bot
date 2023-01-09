@@ -1,7 +1,7 @@
 from asyncio import sleep
 from logging import getLogger
 
-from aiogram import F, Router
+from aiogram import F, Router, Bot
 from aiogram.types import Message
 
 import src.handlers.statictics as st
@@ -16,10 +16,10 @@ router = Router()
 
 
 @router.message((F.voice) | (F.video_note))
-async def speech2text(msg: Message):
+async def speech2text(msg: Message, bot: Bot):
     if not (msg.video_note and msg.chat.id == settings.ANGAR_ID):
         obj = msg.voice if msg.voice else msg.video_note
-        async with remote_open(obj) as f:
+        async with remote_open(bot, obj) as f:
             text = await voice_to_text(f)
             if text:
                 await msg.reply(text)

@@ -60,7 +60,7 @@ async def info_all(msg: Message, bot: Bot):
 
 
 @router.message(F.text.contains("@all"))
-async def all_command(msg: Message):
-    text = await mention_all()
+async def all_command(msg: Message, bot: Bot):
+    text = await mention_all(bot)
     text = " ".join(text)
     await msg.answer(text, parse_mode="HTML")

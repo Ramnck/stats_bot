@@ -1,14 +1,12 @@
-from aiogram import F, Router
+from asyncio import sleep
+
+from aiogram import Bot, F, Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
 from ..db.crud import stats
-from ..tools.formatter import stats_format, mention_all
-
-from ..base import bot_send_message, bot_delete_message
 from ..settings import get_settings
-from asyncio import sleep
-
+from ..tools.formatter import mention_all, stats_format
 
 router = Router()
 settings = get_settings()
@@ -25,18 +23,21 @@ async def help(msg: Message):
 
 
 @router.message(Command(commands=["info"]))
-async def info(msg: Message):
+async def info(msg: Message, bot: Bot):
     user_stats = await stats.get_or_create(msg.from_user.id)
     res = stats_format(user_stats)
     answer = await msg.reply(res, parse_mode="HTML")
     if msg.chat.id == settings.ANGAR_ID:
         await sleep(10)
-        await bot_delete_message(answer, msg)
+        await bot.delete_message(msg.chat.id, answer, msg)
 
 
 @router.message(Command(commands=["happynewyear"]))
-async def new_year(msg: Message):
-    await bot_send_message("Ангар dev поздравляет вас с Новым Годом и дарит вам этого ебейшего бота. С Новым годом, братья ❤️‍🔥🥳🎉")
+async def new_year(msg: Message, bot: Bot):
+    await bot.send_message(
+        settings.ANGAR_ID,
+        "Ангар dev поздравляет вас с Новым Годом и дарит вам этого ебейшего бота. С Новым годом, братья ❤️‍🔥🥳🎉",
+    )
 
 
 @router.message(Command(commands=["infoall"]))
@@ -46,7 +47,9 @@ async def info_all(msg: Message):
     else:
         mentions = await mention_all()
         for mention in mentions:
-            user_stats = await stats.get_or_create(int(mention[mention.index("id=")+3:mention.index('">')]))
+            user_stats = await stats.get_or_create(
+                int(mention[mention.index("id=") + 3 : mention.index('">')])
+            )
             res = stats_format(user_stats)
             res = res.replace("Твоя активность, сучка", "Активность " + mention)
             await msg.reply(res, parse_mode="HTML")
@@ -55,5 +58,5 @@ async def info_all(msg: Message):
 @router.message(F.text.contains("@all"))
 async def all_command(msg: Message):
     text = await mention_all()
-    text = ' '.join(text)
-    await msg.answer(text, parse_mode='HTML')
+    text = " ".join(text)
+    await msg.answer(text, parse_mode="HTML")

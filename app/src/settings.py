@@ -1,8 +1,8 @@
 from functools import lru_cache
+from pathlib import Path
 
 from decouple import config
 from pydantic import BaseSettings
-from pathlib import Path
 
 
 class Settings(BaseSettings):
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     DB_HOST = config("DB_HOST")
     DB_PORT = config("DB_PORT")
 
-    TMP_DIR: Path = Path('.').absolute() / 'tmp'
+    TMP_DIR: Path = Path(".").absolute() / "tmp"
 
 
 @lru_cache()

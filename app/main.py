@@ -3,7 +3,6 @@ import logging
 
 from aiogram import Bot, Dispatcher
 
-from app.src.logic.privacy import bot
 from src.db.database import init_db
 from src.handlers import commands, statictics, voice
 from src.settings import get_settings

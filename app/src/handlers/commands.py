@@ -45,6 +45,7 @@ async def new_year(msg: Message, bot: Bot):
 async def info_all(msg: Message, bot: Bot):
     if msg.chat.id == settings.ANGAR_ID:
         answer = await msg.reply("В ангар срать не буду, спроси в лс")
+        await sleep(10)
         await bot.delete_message(msg.chat.id, answer.message_id)
         await bot.delete_message(msg.chat.id, msg.message_id)
     else:

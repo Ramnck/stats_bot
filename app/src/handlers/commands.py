@@ -29,8 +29,8 @@ async def info(msg: Message, bot: Bot):
     answer = await msg.reply(res, parse_mode="HTML")
     if msg.chat.id == settings.ANGAR_ID:
         await sleep(10)
-        await bot.delete_message(msg.chat.id, answer)
-        await bot.delete_message(msg.chat.id, msg)
+        await bot.delete_message(msg.chat.id, answer.message_id)
+        await bot.delete_message(msg.chat.id, msg.message_id)
 
 
 @router.message(Command(commands=["happynewyear"]))

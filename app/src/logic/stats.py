@@ -1,11 +1,11 @@
+from logging import getLogger
+from time import monotonic
+
 from aiogram.types import ContentType, Message
 
 from ..db.crud import stats
 from ..settings import get_settings
 from ..tools.file_manager import read_chat, update_bot_chat
-from time import monotonic
-from logging import getLogger
-
 
 logger = getLogger("logic.stats_logic")
 

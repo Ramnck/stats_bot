@@ -1,17 +1,19 @@
-from aiogram import F, Router
-from aiogram.types import Message
-from ..settings import get_settings
-from ..tools.file_manager import remote_open
-
-from ..tools.recognition import voice_to_text
 from asyncio import sleep
 from logging import getLogger
 
+from aiogram import F, Router
+from aiogram.types import Message
+
 import src.handlers.statictics as st
+
+from ..settings import get_settings
+from ..tools.file_manager import remote_open
+from ..tools.recognition import voice_to_text
 
 settings = get_settings()
 logger = getLogger("handlers.voice")
 router = Router()
+
 
 @router.message((F.voice) | (F.video_note))
 async def speech2text(msg: Message):

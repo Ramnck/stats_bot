@@ -1,6 +1,10 @@
-from .schemas import StatsBase
+from aiogram import Bot
+
 from ..db.crud import stats
-from ..base import bot_get_member
+from ..settings import get_settings
+from .schemas import StatsBase
+
+settings = get_settings()
 
 words = {
     "talk_stats": "Разгоны",
@@ -23,10 +27,11 @@ def stats_format(stats: StatsBase):
     row.insert(1, f"{words['talk_stats']}: {stat['talk_stats']} 🔥")
     return "\n".join(row)
 
-async def mention_all() -> str:
-    members = await stats.all('id', values_list=True)
+
+async def mention_all(bot: Bot) -> str:
+    members = await stats.all("id", values_list=True)
     mentions = []
     for user_id in members:
-        usr = (await bot_get_member(user_id)).user
+        usr = (await bot.get_chat_member(settings.ANGAR_ID, user_id)).user
         mentions.append(usr.mention_html(usr.full_name))
     return mentions

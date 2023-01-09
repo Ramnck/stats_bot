@@ -23,12 +23,15 @@ class CRUDStats:
         except ValidationError:
             logger.error("ValidationError: stats update alidation")
 
-    async def all(self, *fields, values_list = False) -> dict | list:
+    async def all(self, *fields, values_list=False) -> dict | list:
         members = self.model.all()
         if values_list:
-            members = await members.values_list(*fields, flat=True if len(fields) == 1 else False)
+            members = await members.values_list(
+                *fields, flat=True if len(fields) == 1 else False
+            )
         else:
             members = await members.values(*fields)
         return members
+
 
 stats = CRUDStats(Statistics)

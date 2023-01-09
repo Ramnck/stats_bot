@@ -1,8 +1,8 @@
 from aiogram import F, Router
 from aiogram.types import Message
 
-from ..base import is_based
-from ..logic.stats_logic import analyze_talk, update_stats
+from ..logic.privacy import is_based
+from ..logic.stats import analyze_talk, update_stats
 
 router = Router()
 

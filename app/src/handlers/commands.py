@@ -29,7 +29,8 @@ async def info(msg: Message, bot: Bot):
     answer = await msg.reply(res, parse_mode="HTML")
     if msg.chat.id == settings.ANGAR_ID:
         await sleep(10)
-        await bot.delete_message(msg.chat.id, answer, msg)
+        await bot.delete_message(msg.chat.id, answer)
+        await bot.delete_message(msg.chat.id, msg)
 
 
 @router.message(Command(commands=["happynewyear"]))
@@ -41,11 +42,11 @@ async def new_year(msg: Message, bot: Bot):
 
 
 @router.message(Command(commands=["infoall"]))
-async def info_all(msg: Message):
+async def info_all(msg: Message, bot: Bot):
     if msg.chat.id == settings.ANGAR_ID:
         await msg.reply("В ангар срать не буду, спроси в лс")
     else:
-        mentions = await mention_all()
+        mentions = await mention_all(bot)
         for mention in mentions:
             user_stats = await stats.get_or_create(
                 int(mention[mention.index("id=") + 3 : mention.index('">')])

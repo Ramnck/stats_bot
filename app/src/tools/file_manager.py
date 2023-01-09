@@ -63,7 +63,7 @@ async def download(url: str, destination: str | Path):
 async def remote_open(bot: Bot, object: Downloadable):
     try:
         await sleep(0.03)
-        file = await bot.get_file(object)
+        file = await bot.get_file(object.file_id)
         file_path = settings.TMP_DIR / (
             str(file.file_unique_id) + file.file_path[file.file_path.rindex(".") :]
         )

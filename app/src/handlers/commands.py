@@ -44,7 +44,9 @@ async def new_year(msg: Message, bot: Bot):
 @router.message(Command(commands=["infoall"]))
 async def info_all(msg: Message, bot: Bot):
     if msg.chat.id == settings.ANGAR_ID:
-        await msg.reply("В ангар срать не буду, спроси в лс")
+        answer = await msg.reply("В ангар срать не буду, спроси в лс")
+        await bot.delete_message(msg.chat.id, answer.message_id)
+        await bot.delete_message(msg.chat.id, msg.message_id)
     else:
         mentions = await mention_all(bot)
         for mention in mentions:

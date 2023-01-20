@@ -12,9 +12,10 @@ COPY ./pyproject.toml ./poetry.lock /app/
 
 WORKDIR /app
 
-RUN --mount=target=${POETRY_HOME},type=cache\
-    --mount=target=${POETRY_VENV},type=cache \
-    --mount=target=${POETRY_CACHE_DIR},type=cache\
+RUN \
+    # --mount=target=${POETRY_HOME},type=cache \
+    # --mount=target=${POETRY_VENV},type=cache \
+    # --mount=target=${POETRY_CACHE_DIR},type=cache\
     poetry install
 
 COPY . /app

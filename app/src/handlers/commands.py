@@ -1,16 +1,15 @@
 from asyncio import sleep
 
-from aiogram.fsm.context import FSMContext
 from aiogram import Bot, F, Router
 from aiogram.filters import Command
-from aiogram.utils.keyboard import InlineKeyboardBuilder
-from aiogram.types import Message,  CallbackQuery
+from aiogram.fsm.context import FSMContext
+from aiogram.types import CallbackQuery, Message
+from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardButton
 
 from ..db.crud import stats
+from ..logic.pohui import Menu, get_count, set_count, set_pohui, unset_pohui
 from ..settings import get_settings
-from ..tools.formatter import mention_all, stats_format, rand_pohui
-
-from ..logic.pohui import Menu, set_pohui, unset_pohui, get_count, set_count
+from ..tools.formatter import mention_all, rand_pohui, stats_format
 
 router = Router()
 settings = get_settings()
@@ -74,11 +73,20 @@ async def all_command(msg: Message, bot: Bot):
 async def pohui(msg: Message, bot: Bot):
     keyboard = InlineKeyboardBuilder()
     members = await mention_all(bot)
+    buttons = []
     for mention in members:
-        user_name, user_id = mention[mention.index('">')+2:mention.index("</")], mention[mention.index('id=')+3:mention.index('">')] 
-        keyboard.button(text=user_name, callback_data=f"pohui;{user_id}")
+        user_name, user_id = (
+            mention[mention.index('">') + 2 : mention.index("</")],
+            mention[mention.index("id=") + 3 : mention.index('">')],
+        )
+        buttons.append(
+            InlineKeyboardButton(text=user_name, callback_data=f"pohui;{user_id}")
+        )
+    keyboard.row(*buttons, width=2)
     await bot.delete_message(msg.chat.id, msg.message_id)
-    await msg.answer("На кого похуй?", reply_markup=keyboard.as_markup(), parse_mode='html')
+    await msg.answer(
+        "На кого похуй?", reply_markup=keyboard.as_markup(), parse_mode="html"
+    )
 
 
 @router.callback_query(F.data.startswith("pohui"))
@@ -97,11 +105,20 @@ async def pohui_call(call: CallbackQuery, bot: Bot):
 async def nepohui(msg: Message, bot: Bot):
     keyboard = InlineKeyboardBuilder()
     members = await mention_all(bot)
+    buttons = []
     for mention in members:
-        user_name, user_id = mention[mention.index('">')+2:mention.index("</")], mention[mention.index('id=')+3:mention.index('">')] 
-        keyboard.button(text=user_name, callback_data=f"nepohui;{user_id}")
+        user_name, user_id = (
+            mention[mention.index('">') + 2 : mention.index("</")],
+            mention[mention.index("id=") + 3 : mention.index('">')],
+        )
+        buttons.append(
+            InlineKeyboardButton(text=user_name, callback_data=f"nepohui;{user_id}")
+        )
+    keyboard.row(*buttons, width=2)
     await bot.delete_message(msg.chat.id, msg.message_id)
-    await msg.answer("На кого не похуй?", reply_markup=keyboard.as_markup(), parse_mode='html')
+    await msg.answer(
+        "На кого не похуй?", reply_markup=keyboard.as_markup(), parse_mode="html"
+    )
 
 
 @router.callback_query(F.data.startswith("nepohui"))
@@ -115,11 +132,14 @@ async def nepohui_call(call: CallbackQuery, bot: Bot):
             await bot.answer_callback_query(call.id, text="И так уже не похуй")
     await bot.delete_message(call.message.chat.id, call.message.message_id)
 
+
 @router.callback_query(F.data == "+pohui")
 async def plus_pohui(call: CallbackQuery, bot: Bot):
     chat_name = call.message.chat.id
     count = await get_count(chat_name)
     keyboard = InlineKeyboardBuilder()
     keyboard.button(text=rand_pohui(), callback_data=f"+pohui")
-    await set_count(chat_name, count+1)
-    await call.message.edit_text(f"{rand_pohui()}\nx {count+1}", reply_markup=keyboard.as_markup())
+    await set_count(chat_name, count + 1)
+    await call.message.edit_text(
+        f"{rand_pohui()}\nx {count+1}", reply_markup=keyboard.as_markup()
+    )

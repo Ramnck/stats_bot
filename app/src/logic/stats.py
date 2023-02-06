@@ -48,7 +48,6 @@ async def analyze_talk(msg: Message):
     chat_name, msg_time = str(msg.chat.id), msg.date.timestamp()
     chat = await read_chat(chat_name)
     if not chat is None:
-
         if not chat["last_msg_time"]:
             await update_bot_chat(chat_name, {"last_msg_time": msg_time})
 

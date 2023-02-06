@@ -1,10 +1,9 @@
 from asyncio import sleep
 from logging import getLogger
 
-from aiogram import F, Router, Bot
-from aiogram.types import Message
-
 import src.handlers.statictics as st
+from aiogram import Bot, F, Router
+from aiogram.types import Message
 
 from ..settings import get_settings
 from ..tools.file_manager import remote_open

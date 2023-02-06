@@ -1,15 +1,28 @@
+from random import choice
+
 from aiogram import Bot
 
 from ..db.crud import stats
 from ..settings import get_settings
 from .schemas import StatsBase
-from random import choice
 
 settings = get_settings()
 
-pohui_phrases = ['Господи, как же похуй', "Поебать", "Кристаллически похуй", "Индифферентно", 
-    "Индифферентно в полной мере", "Похуй", "Кому то не похуй?", 
-    "Похую", "Похуям", "Рубиново насрать", "Экстра похуй", "МЕГА похуй", "Похуй+Поебать"]
+pohui_phrases = [
+    "Господи, как же похуй",
+    "Поебать",
+    "Кристаллически похуй",
+    "Индифферентно",
+    "Индифферентно в полной мере",
+    "Похуй",
+    "Кому то не похуй?",
+    "Похую",
+    "Похуям",
+    "Рубиново насрать",
+    "Экстра похуй",
+    "МЕГА похуй",
+    "Похуй+Поебать",
+]
 
 words = {
     "talk_stats": "Разгоны",
@@ -36,10 +49,12 @@ def stats_format(stats: StatsBase):
 async def mention_all(bot: Bot) -> list:
     members = await stats.all("id", values_list=True)
     mentions = []
+    members.remove(1087968824)
     for user_id in members:
         usr = (await bot.get_chat_member(settings.ANGAR_ID, user_id)).user
         mentions.append(usr.mention_html(usr.full_name))
     return mentions
+
 
 def rand_pohui() -> str:
     return choice(pohui_phrases)

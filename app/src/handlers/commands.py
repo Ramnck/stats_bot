@@ -1,12 +1,16 @@
 from asyncio import sleep
 
+from aiogram.fsm.context import FSMContext
 from aiogram import Bot, F, Router
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.types import Message,  CallbackQuery
 
 from ..db.crud import stats
 from ..settings import get_settings
-from ..tools.formatter import mention_all, stats_format
+from ..tools.formatter import mention_all, stats_format, rand_pohui
+
+from ..logic.pohui import Menu, set_pohui, unset_pohui, get_count, set_count
 
 router = Router()
 settings = get_settings()
@@ -64,3 +68,58 @@ async def all_command(msg: Message, bot: Bot):
     text = await mention_all(bot)
     text = " ".join(text)
     await msg.answer(text, parse_mode="HTML")
+
+
+@router.message(Command(commands=["poh"]))
+async def pohui(msg: Message, bot: Bot):
+    keyboard = InlineKeyboardBuilder()
+    members = await mention_all(bot)
+    for mention in members:
+        user_name, user_id = mention[mention.index('">')+2:mention.index("</")], mention[mention.index('id=')+3:mention.index('">')] 
+        keyboard.button(text=user_name, callback_data=f"pohui;{user_id}")
+    await bot.delete_message(msg.chat.id, msg.message_id)
+    await msg.answer("На кого похуй?", reply_markup=keyboard.as_markup(), parse_mode='html')
+
+
+@router.callback_query(F.data.startswith("pohui"))
+async def pohui_call(call: CallbackQuery, bot: Bot):
+    data = call.data.split(";")
+    if data[1] == "839659710":
+        await bot.answer_callback_query(call.id, text="А может лучше на тебя похуй??")
+    else:
+        status = await set_pohui(call.message.chat.id, data[1])
+        if status == "Already pohui":
+            await bot.answer_callback_query(call.id, text="И так уже похуй")
+    await bot.delete_message(call.message.chat.id, call.message.message_id)
+
+
+@router.message(Command(commands=["nepoh"]))
+async def nepohui(msg: Message, bot: Bot):
+    keyboard = InlineKeyboardBuilder()
+    members = await mention_all(bot)
+    for mention in members:
+        user_name, user_id = mention[mention.index('">')+2:mention.index("</")], mention[mention.index('id=')+3:mention.index('">')] 
+        keyboard.button(text=user_name, callback_data=f"nepohui;{user_id}")
+    await bot.delete_message(msg.chat.id, msg.message_id)
+    await msg.answer("На кого не похуй?", reply_markup=keyboard.as_markup(), parse_mode='html')
+
+
+@router.callback_query(F.data.startswith("nepohui"))
+async def nepohui_call(call: CallbackQuery, bot: Bot):
+    data = call.data.split(";")
+    if data[1] == "839659710":
+        await bot.answer_callback_query(call.id, text="На него и так не похуй")
+    else:
+        status = await unset_pohui(call.message.chat.id, data[1])
+        if status == "Already nepohui":
+            await bot.answer_callback_query(call.id, text="И так уже не похуй")
+    await bot.delete_message(call.message.chat.id, call.message.message_id)
+
+@router.callback_query(F.data == "+pohui")
+async def plus_pohui(call: CallbackQuery, bot: Bot):
+    chat_name = call.message.chat.id
+    count = await get_count(chat_name)
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(text=rand_pohui(), callback_data=f"+pohui")
+    await set_count(chat_name, count+1)
+    await call.message.edit_text(f"{rand_pohui()}\nx {count+1}", reply_markup=keyboard.as_markup())

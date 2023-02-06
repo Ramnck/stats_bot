@@ -25,6 +25,7 @@ services:
       - webnet
     volumes:
       - ./app/tmp:/app/tmp
+      - ./app/src:/app/src
 
 
 networks:

@@ -2,12 +2,18 @@
     "speech_to_text": true,
     "chats": {
         "-1001873958874": {
-            "user_id": 804309612,
+            "pohui": [],
+            "pohui_msg_id": 0,
+            "pohui_count": 0,
+            "user_id": 0,
             "last_msg_time": 0,
             "diff_users": {},
             "analysis": false
         },
         "-1001661456708": {
+            "pohui": [],
+            "pohui_msg_id": 0,
+            "pohui_count": 0,
             "user_id": 0,
             "last_msg_time": 0,
             "diff_users": {},

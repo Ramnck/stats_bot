@@ -39,7 +39,7 @@ async def unset_pohui(chat_id: int | str, member_id: int | str) -> str | None:
 async def analyze_pohui(msg: Message, bot: Bot):
     chat_name = str(msg.chat.id)
     chat = await read_chat(chat_name)
-    if not chat["analysis"]:
+    if chat["analysis"]:
         if chat["pohui_msg_id"]:
             await bot.delete_message(chat_name, chat["pohui_msg_id"])
             chat["pohui_msg_id"] = 0

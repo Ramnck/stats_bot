@@ -11,5 +11,4 @@ router = Router()
 @router.message(~F.func(lambda msg: is_based(msg)))
 async def count_entities(msg: Message, bot: Bot):
     await update_stats(msg)
-    await analyze_talk(msg)
-    await analyze_pohui(msg, bot)
+    await analyze_talk(msg, bot)

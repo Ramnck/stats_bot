@@ -1,11 +1,13 @@
 from logging import getLogger
 from time import monotonic
 
+from aiogram import Bot
 from aiogram.types import ContentType, Message
 
 from ..db.crud import stats
 from ..settings import get_settings
 from ..tools.file_manager import read_chat, update_bot_chat
+from .pohui import analyze_pohui
 
 logger = getLogger("logic.stats_logic")
 
@@ -44,7 +46,7 @@ async def _check_msg_count(msg: Message, chat: dict, chat_name: str) -> True | F
     return sum(chat["diff_users"].values()) > 5
 
 
-async def analyze_talk(msg: Message):
+async def analyze_talk(msg: Message, bot: Bot):
     chat_name, msg_time = str(msg.chat.id), msg.date.timestamp()
     chat = await read_chat(chat_name)
     if not chat is None:
@@ -55,6 +57,8 @@ async def analyze_talk(msg: Message):
             await update_bot_chat(
                 chat_name, {"analysis": False, "user_id": 0, "diff_users": {}}
             )
+
+        await analyze_pohui(msg, bot)
 
         if msg_time - chat["last_msg_time"] > settings.TALK_START or chat["analysis"]:
             if not chat["analysis"]:

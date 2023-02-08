@@ -49,7 +49,7 @@ async def analyze_pohui(msg: Message, bot: Bot):
         keyboard = InlineKeyboardBuilder()
         keyboard.button(text=f"{rand_pohui()}", callback_data="+pohui")
         pohui_msg = await bot.send_message(
-            chat_name, f"{rand_pohui()}\nx 0", reply_markup=keyboard.as_markup()
+            chat_name, f"{rand_pohui()}\nx 0", reply_markup=keyboard.as_markup(), reply_to_message_id=msg.message_id
         )
         chat["pohui_msg_id"] = pohui_msg.message_id
     await update_bot_chat(chat_name, chat)

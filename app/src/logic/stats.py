@@ -7,7 +7,7 @@ from aiogram.types import ContentType, Message
 from ..db.crud import stats
 from ..settings import get_settings
 from ..tools.file_manager import read_chat, update_bot_chat
-from .pohui import analyze_pohui
+from .dont_care import analyze_dont_care
 
 logger = getLogger("logic.stats_logic")
 
@@ -58,7 +58,7 @@ async def analyze_talk(msg: Message, bot: Bot):
                 chat_name, {"analysis": False, "user_id": 0, "diff_users": {}}
             )
 
-        await analyze_pohui(msg, bot)
+        await analyze_dont_care(msg, bot)
 
         if msg_time - chat["last_msg_time"] > settings.TALK_START or chat["analysis"]:
             if not chat["analysis"]:

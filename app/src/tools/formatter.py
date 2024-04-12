@@ -8,7 +8,7 @@ from .schemas import StatsBase
 
 settings = get_settings()
 
-pohui_phrases = [
+dont_care_phrases = [
     "Господи, как же похуй",
     "Поебать",
     "Кристаллически похуй",
@@ -56,5 +56,5 @@ async def mention_all(bot: Bot) -> list:
     return mentions
 
 
-def rand_pohui() -> str:
-    return choice(pohui_phrases)
+def rand_dont_care() -> str:
+    return choice(dont_care_phrases)

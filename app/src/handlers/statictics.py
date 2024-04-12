@@ -1,7 +1,6 @@
 from aiogram import Bot, F, Router
 from aiogram.types import Message
 
-from ..logic.pohui import analyze_pohui
 from ..logic.privacy import is_based
 from ..logic.stats import analyze_talk, update_stats
 

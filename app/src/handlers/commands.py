@@ -7,9 +7,9 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardButton
 
 from ..db.crud import stats
-from ..logic.pohui import Menu, get_count, set_count, set_pohui, unset_pohui
+from ..logic.dont_care import Menu, get_count, set_count, set_dont_care, unset_dont_care
 from ..settings import get_settings
-from ..tools.formatter import mention_all, rand_pohui, stats_format
+from ..tools.formatter import mention_all, rand_dont_care, stats_format
 
 router = Router()
 settings = get_settings()
@@ -70,7 +70,7 @@ async def all_command(msg: Message, bot: Bot):
 
 
 @router.message(Command(commands=["poh"]))
-async def pohui(msg: Message, bot: Bot):
+async def dont_care(msg: Message, bot: Bot):
     keyboard = InlineKeyboardBuilder()
     members = await mention_all(bot)
     buttons = []
@@ -80,7 +80,7 @@ async def pohui(msg: Message, bot: Bot):
             mention[mention.index("id=") + 3 : mention.index('">')],
         )
         buttons.append(
-            InlineKeyboardButton(text=user_name, callback_data=f"pohui;{user_id}")
+            InlineKeyboardButton(text=user_name, callback_data=f"dont_care;{user_id}")
         )
     keyboard.row(*buttons, width=2)
     await bot.delete_message(msg.chat.id, msg.message_id)
@@ -89,20 +89,20 @@ async def pohui(msg: Message, bot: Bot):
     )
 
 
-@router.callback_query(F.data.startswith("pohui"))
-async def pohui_call(call: CallbackQuery, bot: Bot):
+@router.callback_query(F.data.startswith("dont_care"))
+async def dont_care_call(call: CallbackQuery, bot: Bot):
     data = call.data.split(";")
     if data[1] == "839659710":
         await bot.answer_callback_query(call.id, text="А может лучше на тебя похуй??")
     else:
-        status = await set_pohui(call.message.chat.id, data[1])
-        if status == "Already pohui":
+        status = await set_dont_care(call.message.chat.id, data[1])
+        if status == "Already dont_care":
             await bot.answer_callback_query(call.id, text="И так уже похуй")
     await bot.delete_message(call.message.chat.id, call.message.message_id)
 
 
 @router.message(Command(commands=["nepoh"]))
-async def nepohui(msg: Message, bot: Bot):
+async def nedont_care(msg: Message, bot: Bot):
     keyboard = InlineKeyboardBuilder()
     members = await mention_all(bot)
     buttons = []
@@ -112,7 +112,7 @@ async def nepohui(msg: Message, bot: Bot):
             mention[mention.index("id=") + 3 : mention.index('">')],
         )
         buttons.append(
-            InlineKeyboardButton(text=user_name, callback_data=f"nepohui;{user_id}")
+            InlineKeyboardButton(text=user_name, callback_data=f"nedont_care;{user_id}")
         )
     keyboard.row(*buttons, width=2)
     await bot.delete_message(msg.chat.id, msg.message_id)
@@ -121,25 +121,25 @@ async def nepohui(msg: Message, bot: Bot):
     )
 
 
-@router.callback_query(F.data.startswith("nepohui"))
-async def nepohui_call(call: CallbackQuery, bot: Bot):
+@router.callback_query(F.data.startswith("nedont_care"))
+async def nedont_care_call(call: CallbackQuery, bot: Bot):
     data = call.data.split(";")
     if data[1] == "839659710":
         await bot.answer_callback_query(call.id, text="На него и так не похуй")
     else:
-        status = await unset_pohui(call.message.chat.id, data[1])
-        if status == "Already nepohui":
+        status = await unset_dont_care(call.message.chat.id, data[1])
+        if status == "Already nedont_care":
             await bot.answer_callback_query(call.id, text="И так уже не похуй")
     await bot.delete_message(call.message.chat.id, call.message.message_id)
 
 
-@router.callback_query(F.data == "+pohui")
-async def plus_pohui(call: CallbackQuery, bot: Bot):
+@router.callback_query(F.data == "+dont_care")
+async def plus_dont_care(call: CallbackQuery, bot: Bot):
     chat_name = call.message.chat.id
     count = await get_count(chat_name)
     keyboard = InlineKeyboardBuilder()
-    keyboard.button(text=rand_pohui(), callback_data=f"+pohui")
+    keyboard.button(text=rand_dont_care(), callback_data=f"+dont_care")
     await set_count(chat_name, count + 1)
     await call.message.edit_text(
-        f"{rand_pohui()}\nx {count+1}", reply_markup=keyboard.as_markup()
+        f"{rand_dont_care()}\nx {count+1}", reply_markup=keyboard.as_markup()
     )
